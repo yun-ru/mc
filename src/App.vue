@@ -8,8 +8,8 @@
     </div>
     <div class="btns">
       <div class="menuBtn" @click="toggleMenu"></div>
-      <div class="countDownBtn" @click="countingDown">
-        <div v-show="counting" class="count">
+      <div class="countDownBtn" @click="showAlertBox">
+        <div v-show="counting" class="count unselectable">
           01 : {{time}}
         </div>
       </div>
@@ -17,6 +17,23 @@
     <div class="main">
       <img :src="selectedItem">
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-body">
+            <h4>確認兌換優惠</h4>
+            <p>請確認您已在麥當勞餐廳櫃檯，點選「立即兌換」後，需於兩分鐘內出示給結帳人員。</p>
+            <div class="text-right">
+              <button type="button" class="btn btn-link" data-dismiss="modal">暫不兌換</button>
+              <button type="button" class="btn btn-link" data-dismiss="modal" @click="countingDown">立即兌換</button>
+            </div>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
   </div>
 </template>
 
@@ -27,17 +44,20 @@ export default {
       time: 59,
       showMenu: false,
       counting: false,
-      selectedItem: '/static/images/pm_02.png',
+      selectedItem: '/static/images/pm_02.jpg',
       items: [
-        {id: 1, title: '買飲料送勁辣雞腿堡', imgSrc: '/static/images/pm_01.png'},
-        {id: 2, title: '買飲料送大麥克', imgSrc: '/static/images/pm_02.png'},
-        {id: 3, title: '買套餐送辣雞翅', imgSrc: '/static/images/pm_03.png'},
-        {id: 4, title: '買套餐送雞塊', imgSrc: '/static/images/pm_04.png'},
-        {id: 5, title: '一元咖啡', imgSrc: '/static/images/am_03.png'},
-        {id: 6, title: '買有氧早餐送火腿蛋堡', imgSrc: '/static/images/am_04.png'},
-        {id: 7, title: '冰炫風買一送一', imgSrc: '/static/images/snack_01.png'},
-        {id: 8, title: '大薯買一送一', imgSrc: '/static/images/pm_06.png'},
-        {id: 9, title: '買套餐送聖代', imgSrc: '/static/images/pm_07.png'}
+        {title: '一元薯餅', imgSrc: '/static/images/1001.jpg'},
+        {title: '一元咖啡', imgSrc: '/static/images/1002.jpg'},
+        {title: '大薯買一送一', imgSrc: '/static/images/2001.jpg'},
+        {title: '冰炫風買一送一', imgSrc: '/static/images/20002.jpg'},
+        {title: '聖代買一送一', imgSrc: '/static/images/2003.jpg'},
+        {title: '買有氧早餐送火腿蛋堡', imgSrc: '/static/images/3001.jpg'},
+        {title: '買套餐送勁辣雞腿堡', imgSrc: '/static/images/3002.jpg'},
+        {title: '買套餐送大麥克', imgSrc: '/static/images/3003.jpg'},
+        {title: '買套餐送辣雞翅', imgSrc: '/static/images/3004.jpg'},
+        {title: '買套餐送雞塊', imgSrc: '/static/images/3005.jpg'},
+        {title: '買套餐送聖代', imgSrc: '/static/images/3006.jpg'},
+        {title: '買套餐送蘋果派', imgSrc: '/static/images/3007.jpg'},
       ]
     }
   },
@@ -52,14 +72,16 @@ export default {
     toggleMenu () {
       this.showMenu = !this.showMenu
     },
+    showAlertBox () {
+      if (!this.counting){
+        $(".modal").modal()
+      }
+    },
     countingDown () {
-      this.counting = true
-      if (this.interval) {
-        clearInterval(this.interval)
-        this.interval = null
-      } else {
+      if (!this.interval) {
+        this.counting = true
         this.interval = setInterval(function () {
-          if (this.time > 50) {
+          if (this.time > 0) {
             this.time -= 1
           } else {
             this.time = 59
@@ -72,6 +94,8 @@ export default {
 </script>
 
 <style lang="stylus">
+  countingBarH = 90px
+  mcYellow = #f5aa0a
   html,body,div,img
     padding: 0
     margin: 0
@@ -104,20 +128,20 @@ export default {
     .countDownBtn
       position: absolute
       bottom: 0
-      height: 63px
+      height: countingBarH
       width: 100%
       .count
         background-image: url('assets/countdown-bg.png')
-        background-color: #f5aa0a
+        background-color: mcYellow
         background-size: 100%
         background-repeat: no-repeat
         background-position: center center
         color: #fff
         text-align: right
-        padding-top: 22px
         padding-right: 65px
         font-size: 21px
-        height: 100%
+        height: countingBarH
+        line-height: countingBarH
   .main
     position: absolute
     width: 100%
@@ -126,5 +150,29 @@ export default {
       width: 100%
       margin-top: -20px
       float: left
+
+  // Modal
+  .modal-dialog
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 100%
+    margin: 0
+    .modal-content
+      margin: 20px
+      margin-bottom: 60px
+      h4
+        margin-bottom: 20px
+
+
+  // Util
+  .unselectable {
+    -webkit-touch-callout: none
+    -webkit-user-select: none
+    -khtml-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+  }
 
 </style>

@@ -1,0 +1,20 @@
+{
+  "name": "mc-vue",
+  "description": "A Vue.js project",
+  "main": "",
+  "authors": [
+    "Ruby Chen <mp4bj6ruby@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/yun-ru/mc",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}
